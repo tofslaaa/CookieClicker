@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blueLight">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:text="@string/settings"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/settings_close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="5dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_close_just"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sound_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:fontFamily="@font/noto_sans"
+        android:text="@string/sound"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/settings_close_button" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sound_switch"
+        style="@style/SwitchCompatStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/sound_text"
+        app:layout_constraintRight_toLeftOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="@id/sound_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/vibration_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/noto_sans"
+        android:text="@string/vibration"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/sound_text" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/vibration_switch"
+        style="@style/SwitchCompatStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/vibration_text"
+        app:layout_constraintRight_toLeftOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="@id/vibration_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ad_off_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/noto_sans"
+        android:text="@string/ad_off"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/vibration_text" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".14444" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".86666" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

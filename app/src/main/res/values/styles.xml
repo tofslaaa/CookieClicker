@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SwitchCompatStyle">
+        <item name="android:thumb">@drawable/ic_cookie</item>
+        <item name="trackTint">@color/switch_color</item>
+    </style>
+
 </resources>

@@ -4,4 +4,8 @@
     <string name="shop">Магазин</string>
     <string name="for_10_sec">за 10 сек</string>
     <string name="you_havent_boost">У вас пока нет ускорителей,\nкупите в магазине</string>
+    <string name="settings">Настройки</string>
+    <string name="sound">Звук</string>
+    <string name="vibration">Вибрация</string>
+    <string name="ad_off">Отключить рекламу</string>
 </resources>
