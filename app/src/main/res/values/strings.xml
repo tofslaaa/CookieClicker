@@ -2,4 +2,6 @@
     <string name="app_name">Cookie Clicker</string>
     <string name="your_boost">Ваши ускорители</string>
     <string name="shop">Магазин</string>
+    <string name="for_10_sec">за 10 сек</string>
+    <string name="you_havent_boost">У вас пока нет ускорителей,\nкупите в магазине</string>
 </resources>
