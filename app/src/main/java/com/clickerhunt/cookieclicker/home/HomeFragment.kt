@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.cookie.CookieFragment
 import com.clickerhunt.cookieclicker.shop.ShopFragment
@@ -11,8 +12,16 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
+    private lateinit var adapter: BoostAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = BoostAdapter(listenerAdapter)
+
+        recycler_boost.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recycler_boost.adapter = adapter
 
         shop_open_button.setOnClickListener { displayShop() }
         shop_close_button.setOnClickListener { displayCookie() }
@@ -48,5 +57,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         shop_close_button.visibility = View.VISIBLE
     }
 
+    private val listenerAdapter = object : BoostAdapter.Listener {
+        override fun onDeleteBoostClicked(position: Int) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+    }
 
 }
