@@ -29,6 +29,8 @@ class ShopAdapter(private val values: List<ShopModel>, private val listener: Lis
             holder.boostValue.visibility = View.INVISIBLE
             holder.boostIcon.visibility = View.INVISIBLE
             holder.boostTick.visibility = View.INVISIBLE
+        } else {
+            holder.boostValue.text = "+${shopModel.boostValue}"
         }
 
         holder.boostText.text = shopModel.boostText
