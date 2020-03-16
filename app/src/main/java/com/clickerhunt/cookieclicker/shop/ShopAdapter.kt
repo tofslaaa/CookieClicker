@@ -34,9 +34,19 @@ class ShopAdapter(private val values: List<ShopModel>, private val listener: Lis
         }
 
         holder.boostText.setText(shopModel.boostText)
-        holder.buyFor.text = "Купить за ${shopModel.byFor}"
+        holder.buyFor.text = "Купить за ${shopModel.byFor.format()}"
 
         holder.buyButton?.setOnClickListener { listener.onBuyClicked(shopModel) }
+    }
+
+    private fun Int.format(): String {
+        return if (this >= 1000) {
+            val second = this.toString().takeLast(3)
+            val first = this.toString().removeSuffix(second)
+            "$first $second"
+        } else {
+            this.toString()
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
