@@ -8,4 +8,9 @@
     <string name="sound">Звук</string>
     <string name="vibration">Вибрация</string>
     <string name="ad_off">Отключить рекламу</string>
+
+    <string name="shop_1">Вам будет\nначисляться +1\nкаждые 10 сек</string>
+    <string name="shop_5">Вам будет\nначисляться +5\nкаждые 10 сек</string>
+    <string name="shop_10">Вам будет\nначисляться +10\nкаждые 10 сек</string>
+    <string name="shop_additional">Дополнительный\nслот для\nускорителей</string>
 </resources>
