@@ -33,7 +33,7 @@ class ShopAdapter(private val values: List<ShopModel>, private val listener: Lis
             holder.boostValue.text = "+${shopModel.boostValue}"
         }
 
-        holder.boostText.text = shopModel.boostText
+        holder.boostText.setText(shopModel.boostText)
         holder.buyFor.text = "Купить за ${shopModel.byFor}"
 
         holder.buyButton?.setOnClickListener { listener.onBuyClicked(shopModel) }
