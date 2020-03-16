@@ -3,6 +3,7 @@ package com.clickerhunt.cookieclicker.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.cookie.CookieFragment
 import com.clickerhunt.cookieclicker.shop.ShopFragment
@@ -15,6 +16,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         shop_open_button.setOnClickListener { displayShop() }
         shop_close_button.setOnClickListener { displayCookie() }
+        settings_button.setOnClickListener {
+            it.findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+        }
     }
 
     override fun onStart() {
