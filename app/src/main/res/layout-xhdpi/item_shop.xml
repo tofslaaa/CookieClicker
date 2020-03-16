@@ -110,7 +110,6 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/boost_image"
         app:layout_constraintLeft_toRightOf="@id/boost_image"
-        app:layout_constraintRight_toRightOf=""
         tools:text="Вам будет\nначисляться +10\nкаждые 10 сек" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
