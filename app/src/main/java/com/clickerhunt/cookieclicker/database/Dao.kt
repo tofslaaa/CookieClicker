@@ -9,7 +9,7 @@ interface ConfigurationDao {
     fun upsert(configuration: Configuration)
 
     @Query("SELECT * FROM configuration WHERE id = 0")
-    fun getSettings(): Configuration
+    fun getConfiguration(): Configuration?
 }
 
 @Dao

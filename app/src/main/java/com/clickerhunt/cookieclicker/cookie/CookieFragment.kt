@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_cookie.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class CookieFragment : Fragment(R.layout.fragment_cookie) {
+class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.fragment_cookie) {
 
     private var radius = 0
     private var offset = Point()
@@ -32,8 +32,14 @@ class CookieFragment : Fragment(R.layout.fragment_cookie) {
             val sqrt = sqrt((event.x - offset.x).pow(2) + (event.y - offset.y).pow(2))
             if (sqrt < radius) {
                 cookie_click.showCookie(event.x, event.y, "+1")
+                listenerCookie.onCookieClicked()
             }
         }
         return@OnTouchListener true
+    }
+
+
+    interface Listener {
+        fun onCookieClicked()
     }
 }

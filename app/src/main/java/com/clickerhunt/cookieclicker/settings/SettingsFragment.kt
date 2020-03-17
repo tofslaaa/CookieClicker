@@ -32,9 +32,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun updateViews() {
-        if (settings.getSettings() != null) {
-            sound_switch.isChecked = settings.getSettings().soundIsOn
-            vibration_switch.isChecked = settings.getSettings().vibrationIsOn
+        val configuration = settings.getConfiguration()
+        if (configuration != null) {
+            sound_switch.isChecked = configuration.soundIsOn
+            vibration_switch.isChecked = configuration.vibrationIsOn
         }
     }
 
