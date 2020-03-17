@@ -1,12 +1,11 @@
 package com.clickerhunt.cookieclicker.cookie
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -30,8 +29,11 @@ class CookieView @JvmOverloads constructor(
         textSize = 12.spToPx()
     }
 
-    fun showCookie(x: Float, y: Float) {
-        listCookies.add(CookieInfo(PointF(x, y)))
+    private val duration = 64
+    private val interpolator = DecelerateInterpolator(0.4f)
+
+    fun showCookie(x: Float, y: Float, score: String) {
+        listCookies.add(CookieInfo(PointF(x, y), score = score))
         invalidate()
     }
 
@@ -40,11 +42,16 @@ class CookieView @JvmOverloads constructor(
         while (iterator.hasNext()) {
             val cookie = iterator.next()
 
-            if (cookie.alpha in 5..255) {
-                cookie.alpha -= 5
+            if (cookie.frame < duration) {
+                val interpolation =
+                    interpolator.getInterpolation((duration - cookie.frame.toFloat()) / duration)
+                cookie.alpha = (interpolation * 255).toInt()
+                cookie.point.y -= interpolation * 3
+                cookie.frame++
                 invalidate()
             } else {
                 iterator.remove()
+                invalidate()
             }
 
             paintBitmap.alpha = cookie.alpha
@@ -64,5 +71,10 @@ class CookieView @JvmOverloads constructor(
         }
     }
 
-    data class CookieInfo(val point: PointF, var alpha: Int = 255)
+    data class CookieInfo(
+        val point: PointF,
+        var alpha: Int = 255,
+        val score: String,
+        var frame: Int = 0
+    )
 }

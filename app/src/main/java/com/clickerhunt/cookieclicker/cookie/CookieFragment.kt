@@ -31,7 +31,7 @@ class CookieFragment : Fragment(R.layout.fragment_cookie) {
 
             val sqrt = sqrt((event.x - offset.x).pow(2) + (event.y - offset.y).pow(2))
             if (sqrt < radius) {
-                cookie_click.showCookie(event.x, event.y)
+                cookie_click.showCookie(event.x, event.y, "+1")
             }
         }
         return@OnTouchListener true
