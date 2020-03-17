@@ -11,8 +11,18 @@ import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.model.ShopModel
 import kotlinx.android.synthetic.main.item_shop.view.*
 
-class ShopAdapter(private val values: List<ShopModel>, private val listener: Listener) :
+class ShopAdapter(
+    private val listener: Listener
+) :
     RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
+
+    var cookiesCount: Int = 0
+    private val values = listOf(
+        ShopModel(1, R.string.shop_1, 50),
+        ShopModel(5, R.string.shop_5, 100),
+        ShopModel(10, R.string.shop_10, 2500),
+        ShopModel(boostText = R.string.shop_additional, byFor = 10000)
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
@@ -33,10 +43,18 @@ class ShopAdapter(private val values: List<ShopModel>, private val listener: Lis
             holder.boostValue.text = "+${shopModel.boostValue}"
         }
 
+        if (shopModel.byFor > cookiesCount) {
+            holder.buyButton?.isEnabled = false
+            holder.buyButton?.alpha = 0.5f
+        }
+
         holder.boostText.setText(shopModel.boostText)
         holder.buyFor.text = "Купить за ${shopModel.byFor.format()}"
 
-        holder.buyButton?.setOnClickListener { listener.onBuyClicked(shopModel) }
+        holder.buyButton?.setOnClickListener {
+            listener.onBuyClicked(shopModel)
+        }
+
     }
 
     private fun Int.format(): String {

@@ -48,7 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onStop() {
         super.onStop()
-        cookiesDao.upsert(Configuration(cookiesCount = cookiesCount))
+        saveData()
     }
 
     private fun displayCookie() {
@@ -63,14 +63,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun displayShop() {
+        saveData()
+
         val fragmentTransaction = childFragmentManager.beginTransaction()
         fragmentTransaction.replace(
             R.id.placeholder,
-            ShopFragment()
+            ShopFragment(listenerShop)
         )
         fragmentTransaction.commit()
         shop_open_button.visibility = View.INVISIBLE
         shop_close_button.visibility = View.VISIBLE
+    }
+
+    private fun saveData() {
+        cookiesDao.upsert(Configuration(cookiesCount = cookiesCount))
     }
 
     private val listenerAdapter = object : BoostAdapter.Listener {
@@ -82,6 +88,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val listenerCookie = object : CookieFragment.Listener {
         override fun onCookieClicked() {
             cookiesCount++
+            cookies_count.text = cookiesCount.toString()
+        }
+    }
+
+    private val listenerShop = object : ShopFragment.Listener {
+        override fun onBuyBoost(cost: Int) {
+            cookiesCount -= cost
             cookies_count.text = cookiesCount.toString()
         }
     }
