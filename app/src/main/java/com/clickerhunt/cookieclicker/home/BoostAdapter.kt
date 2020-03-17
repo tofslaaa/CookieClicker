@@ -1,5 +1,6 @@
 package com.clickerhunt.cookieclicker.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,11 +28,17 @@ class BoostAdapter(private val listener: Listener) :
         val boostModel = values[position]
 
         if (boostModel.boostValue == null) {
+            Log.d("BOOST", "invisible")
             holder.boostValue.visibility = View.INVISIBLE
             holder.boostIcon.visibility = View.INVISIBLE
             holder.boostTick.visibility = View.INVISIBLE
             holder.deleteButton.visibility = View.INVISIBLE
         } else {
+            holder.boostValue.visibility = View.VISIBLE
+            holder.boostIcon.visibility = View.VISIBLE
+            holder.deleteButton.visibility = View.VISIBLE
+            holder.boostTick.visibility = View.VISIBLE
+
             holder.boostValue.text = "+${boostModel.boostValue}"
             holder.deleteButton.setOnClickListener { listener.onDeleteBoostClicked(position) }
         }

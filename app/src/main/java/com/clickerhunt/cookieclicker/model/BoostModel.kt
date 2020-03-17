@@ -1,3 +1,3 @@
 package com.clickerhunt.cookieclicker.model
 
-data class BoostModel(var boostValue: Int? = null, val id: Int)
+data class BoostModel(var boostValue: Int? = null, var id: Int? = null)

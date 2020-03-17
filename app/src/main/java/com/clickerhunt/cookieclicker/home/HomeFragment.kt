@@ -9,6 +9,7 @@ import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.cookie.CookieFragment
 import com.clickerhunt.cookieclicker.database.AppDatabase
 import com.clickerhunt.cookieclicker.database.Configuration
+import com.clickerhunt.cookieclicker.model.BoostModel
 import com.clickerhunt.cookieclicker.shop.ShopFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -81,7 +82,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val listenerAdapter = object : BoostAdapter.Listener {
         override fun onDeleteBoostClicked(position: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            adapter.values[position].boostValue = null
+            adapter.values[position].id = null
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -100,6 +103,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         override fun onBuyAdditionalSlot() {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onBoostClicked(boost: BoostModel, callback: (Boolean) -> Unit) {
+            var notDone = false
+            adapter.values.forEach {
+                if (it.id == null && !notDone) {
+                    it.boostValue = boost.boostValue
+                    it.id = boost.id
+                    notDone = true
+                }
+            }
+
+            callback(notDone)
+            adapter.notifyDataSetChanged()
         }
     }
 

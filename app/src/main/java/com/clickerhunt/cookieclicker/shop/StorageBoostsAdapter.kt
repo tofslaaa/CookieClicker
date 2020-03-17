@@ -9,7 +9,8 @@ import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.model.BoostModel
 import kotlinx.android.synthetic.main.item_boost.view.*
 
-class StorageBoostsAdapter : RecyclerView.Adapter<StorageBoostsAdapter.ViewHolder>() {
+class StorageBoostsAdapter(private val listener: Listener) :
+    RecyclerView.Adapter<StorageBoostsAdapter.ViewHolder>() {
 
     val values = mutableListOf<BoostModel>()
 
@@ -23,9 +24,14 @@ class StorageBoostsAdapter : RecyclerView.Adapter<StorageBoostsAdapter.ViewHolde
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.boostValue.text = "+${values[position].boostValue}"
+        holder.itemView.setOnClickListener { listener.onBoostClicked(values[position]) }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val boostValue: TextView = itemView.boost_value
+    }
+
+    interface Listener {
+        fun onBoostClicked(boost: BoostModel)
     }
 }
