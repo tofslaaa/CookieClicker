@@ -18,10 +18,10 @@ class ShopAdapter(
 
     var cookiesCount: Int = 0
     private val values = listOf(
-        ShopModel(1, R.string.shop_1, 50),
-        ShopModel(5, R.string.shop_5, 100),
-        ShopModel(10, R.string.shop_10, 2500),
-        ShopModel(boostText = R.string.shop_additional, byFor = 10000)
+        ShopModel(1, R.string.shop_1, 5),
+        ShopModel(5, R.string.shop_5, 10),
+        ShopModel(10, R.string.shop_10, 15),
+        ShopModel(boostText = R.string.shop_additional, byFor = 20)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

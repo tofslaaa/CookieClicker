@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 class StorageBoosts(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val score: Int
 )
