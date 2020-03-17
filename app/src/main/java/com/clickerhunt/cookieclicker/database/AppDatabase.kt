@@ -6,14 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Configuration::class, StorageBoosts::class, UsedBoosts::class],
+    entities = [Configuration::class, StorageBoost::class, UsedBoost::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun configurationDao(): ConfigurationDao
-    abstract fun storageBoostsDao(): StorageBoostsDao
-    abstract fun usedBoostsDao(): UsedBoostsDao
+    abstract fun storageBoostsDao(): StorageBoostDao
+    abstract fun usedBoostsDao(): UsedBoostDao
 
     companion object {
         @Volatile

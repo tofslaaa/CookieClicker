@@ -13,33 +13,39 @@ interface ConfigurationDao {
 }
 
 @Dao
-interface StorageBoostsDao {
+interface StorageBoostDao {
 
     @Insert
-    fun insert(boost: StorageBoosts)
+    fun insert(boost: StorageBoost)
 
     @Delete
-    fun delete(boost: StorageBoosts)
+    fun delete(boost: StorageBoost)
 
     @Update
-    fun update(boost: StorageBoosts)
+    fun update(boost: StorageBoost)
 
-    @Query("SELECT * FROM storageboosts")
-    fun getStorageBoosts(): List<StorageBoosts>
+    @Query("SELECT * FROM storageboost")
+    fun getStorageBoosts(): List<StorageBoost>
+
+    @Query("SELECT * FROM storageboost WHERE id = :id")
+    fun getBoostById(id: Int): StorageBoost
 }
 
 @Dao
-interface UsedBoostsDao {
+interface UsedBoostDao {
 
     @Insert
-    fun insert(boost: UsedBoosts)
+    fun insert(boost: UsedBoost)
 
     @Delete
-    fun delete(boost: UsedBoosts)
+    fun delete(boost: UsedBoost)
 
     @Update
-    fun update(boost: UsedBoosts)
+    fun update(boost: UsedBoost)
 
-    @Query("SELECT * FROM usedboosts")
-    fun getStorageBoosts(): List<UsedBoosts>
+    @Query("SELECT * FROM usedboost")
+    fun getUsedBoosts(): List<UsedBoost>
+
+    @Query("SELECT * FROM usedboost WHERE id = :id")
+    fun getBoostById(id: Int): UsedBoost
 }
