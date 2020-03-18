@@ -2,11 +2,14 @@ package com.clickerhunt.cookieclicker.home
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.cookie.CookieFragment
 import com.clickerhunt.cookieclicker.database.AppDatabase
@@ -45,6 +48,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         usedBoostsDao.getUsedBoosts().observe(viewLifecycleOwner) { boosts ->
+            if (adapter.values.isEmpty()) {
+                TransitionManager.beginDelayedTransition(
+                    view as ViewGroup,
+                    AutoTransition().apply {
+                        duration = 200
+                    })
+            }
             val storageBoosts = boosts.map { BoostModel(it.score, it.id, it.empty) }
             adapter.values.clear()
             adapter.values.addAll(storageBoosts)
