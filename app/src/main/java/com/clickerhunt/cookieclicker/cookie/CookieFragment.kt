@@ -28,7 +28,7 @@ class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.f
             val y1 = (diameter - hord) / 2 + cookie_image.top
             val y = (y1.toInt()..((y1 + hord).toInt())).random()
 
-            for (i in 0 until it) {
+            for (i in 0 until it - 1) {
                 val offset = 32.dpToPx()
                 val xChild = Random.nextInt(x - offset, x + offset)
                 val yChild = Random.nextInt(y - offset, y + offset)
