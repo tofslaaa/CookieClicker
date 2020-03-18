@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_boost.view.*
 class BoostAdapter(private val listener: Listener) :
     RecyclerView.Adapter<BoostAdapter.ViewHolder>() {
 
-    val values = (1..3).map { BoostModel() }.toMutableList()
+    val values = mutableListOf<BoostModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
@@ -27,7 +27,7 @@ class BoostAdapter(private val listener: Listener) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val boostModel = values[position]
 
-        if (boostModel.boostValue == null) {
+        if (boostModel.empty) {
             Log.d("BOOST", "invisible")
             holder.boostValue.visibility = View.INVISIBLE
             holder.boostIcon.visibility = View.INVISIBLE
@@ -40,7 +40,7 @@ class BoostAdapter(private val listener: Listener) :
             holder.boostTick.visibility = View.VISIBLE
 
             holder.boostValue.text = "+${boostModel.boostValue}"
-            holder.deleteButton.setOnClickListener { listener.onDeleteBoostClicked(position) }
+            holder.deleteButton.setOnClickListener { listener.onDeleteBoostClicked(boostModel) }
         }
     }
 
@@ -53,6 +53,6 @@ class BoostAdapter(private val listener: Listener) :
     }
 
     interface Listener {
-        fun onDeleteBoostClicked(position: Int)
+        fun onDeleteBoostClicked(boostModel: BoostModel)
     }
 }

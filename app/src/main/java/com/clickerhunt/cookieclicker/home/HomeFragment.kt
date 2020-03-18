@@ -3,12 +3,15 @@ package com.clickerhunt.cookieclicker.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.cookie.CookieFragment
 import com.clickerhunt.cookieclicker.database.AppDatabase
 import com.clickerhunt.cookieclicker.database.Configuration
+import com.clickerhunt.cookieclicker.database.StorageBoost
+import com.clickerhunt.cookieclicker.database.UsedBoost
 import com.clickerhunt.cookieclicker.model.BoostModel
 import com.clickerhunt.cookieclicker.shop.ShopFragment
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -19,6 +22,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var cookiesCount = 0
 
     private val cookiesDao by lazy { AppDatabase.invoke(requireContext()).configurationDao() }
+    private val usedBoostsDao by lazy { AppDatabase.invoke(requireContext()).usedBoostsDao() }
+    private val storageBoostsDao by lazy { AppDatabase.invoke(requireContext()).storageBoostsDao() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,6 +38,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         shop_close_button.setOnClickListener { displayCookie() }
         settings_button.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+        }
+
+        usedBoostsDao.getUsedBoosts().observe(viewLifecycleOwner) { boosts ->
+            val storageBoosts = boosts.map { BoostModel(it.score, it.id, it.empty) }
+            adapter.values.clear()
+            adapter.values.addAll(storageBoosts)
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -81,12 +93,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private val listenerAdapter = object : BoostAdapter.Listener {
-        override fun onDeleteBoostClicked(position: Int) {
-            adapter.values[position].boostValue = null
-            adapter.values[position].id = null
-            adapter.notifyDataSetChanged()
+        override fun onDeleteBoostClicked(boostModel: BoostModel) {
+            storageBoostsDao.insert(StorageBoost(boostModel.id, boostModel.boostValue))
+            usedBoostsDao.update(UsedBoost(boostModel.id, 0, true))
         }
     }
+
 
     private val listenerCookie = object : CookieFragment.Listener {
         override fun onCookieClicked() {
@@ -102,22 +114,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         override fun onBuyAdditionalSlot() {
-            adapter.values.add(BoostModel())
-            adapter.notifyDataSetChanged()
-        }
-
-        override fun onBoostClicked(boost: BoostModel, callback: (Boolean) -> Unit) {
-            var notDone = false
-            adapter.values.forEach {
-                if (it.id == null && !notDone) {
-                    it.boostValue = boost.boostValue
-                    it.id = boost.id
-                    notDone = true
-                }
-            }
-
-            callback(notDone)
-            adapter.notifyDataSetChanged()
+            usedBoostsDao.insert(UsedBoost(0, 0, true))
         }
     }
 

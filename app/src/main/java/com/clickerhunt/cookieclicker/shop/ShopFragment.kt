@@ -1,15 +1,16 @@
 package com.clickerhunt.cookieclicker.shop
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.database.AppDatabase
 import com.clickerhunt.cookieclicker.database.StorageBoost
+import com.clickerhunt.cookieclicker.database.UsedBoost
 import com.clickerhunt.cookieclicker.model.BoostModel
 import com.clickerhunt.cookieclicker.model.ShopModel
 import kotlinx.android.synthetic.main.fragment_shop.*
@@ -20,6 +21,7 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
     private lateinit var adapterBoosts: StorageBoostsAdapter
 
     private val storageBoostsDao by lazy { AppDatabase.invoke(requireContext()).storageBoostsDao() }
+    private val usedBoostsDao by lazy { AppDatabase.invoke(requireContext()).usedBoostsDao() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,21 +35,17 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
         recycler_shop.adapter = adapterShop
 
         adapterBoosts = StorageBoostsAdapter(listenerBoostsAdapter)
-        val storageBoosts = storageBoostsDao.getStorageBoosts().map {
-            BoostModel(it.score, it.id)
-        }
         recycler_your_boost.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         recycler_your_boost.adapter = adapterBoosts
-        if (storageBoosts != null) {
+
+        storageBoostsDao.getStorageBoosts().observe(viewLifecycleOwner) { boosts ->
+            val storageBoosts = boosts.map { BoostModel(it.score, it.id, false) }
+            adapterBoosts.values.clear()
             adapterBoosts.values.addAll(storageBoosts)
             adapterBoosts.notifyDataSetChanged()
+            updateViews()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        updateViews()
     }
 
     private fun updateViews() {
@@ -71,14 +69,6 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
             listener.onBuyAdditionalSlot()
         } else {
             storageBoostsDao.insert(StorageBoost(score = value))
-            adapterBoosts.values.add(
-                BoostModel(
-                    value,
-                    storageBoostsDao.getStorageBoosts().last().id
-                )
-            )
-            adapterBoosts.notifyDataSetChanged()
-            updateViews()
         }
     }
 
@@ -94,15 +84,9 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
     private val listenerBoostsAdapter = object : StorageBoostsAdapter.Listener {
         override fun onBoostClicked(boost: BoostModel) {
             Log.d("BOOST", "${boost.id} and ${boost.boostValue}")
-
-            listener.onBoostClicked(boost) { done ->
-                if (done) {
-                    storageBoostsDao.delete(storageBoostsDao.getBoostById(boost.id!!))
-
-                    adapterBoosts.values.remove(boost)
-                    adapterBoosts.notifyDataSetChanged()
-                    updateViews()
-                }
+            usedBoostsDao.getEmptyBoost()?.let { usedBoost ->
+                storageBoostsDao.delete(boost.id)
+                usedBoostsDao.update(UsedBoost(usedBoost.id, boost.boostValue, false))
             }
         }
     }
@@ -110,6 +94,5 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
     interface Listener {
         fun onBuyBoost(cost: Int)
         fun onBuyAdditionalSlot()
-        fun onBoostClicked(boost: BoostModel, callback: (Boolean) -> Unit)
     }
 }

@@ -4,7 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class UsedBoost(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val score: Int
+data class UsedBoost(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val score: Int,
+    val empty: Boolean,
+    val updateTime: Long = System.currentTimeMillis()
 )

@@ -1,6 +1,8 @@
 package com.clickerhunt.cookieclicker.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.OnConflictStrategy.IGNORE
 
 @Dao
 interface ConfigurationDao {
@@ -15,17 +17,20 @@ interface ConfigurationDao {
 @Dao
 interface StorageBoostDao {
 
-    @Insert
+    @Insert(onConflict = IGNORE)
     fun insert(boost: StorageBoost)
 
     @Delete
     fun delete(boost: StorageBoost)
 
+    @Query("DELETE FROM storageboost WHERE id=:id")
+    fun delete(id: Int)
+
     @Update
     fun update(boost: StorageBoost)
 
     @Query("SELECT * FROM storageboost")
-    fun getStorageBoosts(): List<StorageBoost>
+    fun getStorageBoosts(): LiveData<List<StorageBoost>>
 
     @Query("SELECT * FROM storageboost WHERE id = :id")
     fun getBoostById(id: Int): StorageBoost
@@ -34,7 +39,7 @@ interface StorageBoostDao {
 @Dao
 interface UsedBoostDao {
 
-    @Insert
+    @Insert(onConflict = IGNORE)
     fun insert(boost: UsedBoost)
 
     @Delete
@@ -43,9 +48,12 @@ interface UsedBoostDao {
     @Update
     fun update(boost: UsedBoost)
 
-    @Query("SELECT * FROM usedboost")
-    fun getUsedBoosts(): List<UsedBoost>
+    @Query("SELECT * FROM usedboost ORDER BY empty ASC, updateTime ASC")
+    fun getUsedBoosts(): LiveData<List<UsedBoost>>
 
     @Query("SELECT * FROM usedboost WHERE id = :id")
     fun getBoostById(id: Int): UsedBoost
+
+    @Query("SELECT * FROM usedboost WHERE empty LIMIT 1")
+    fun getEmptyBoost(): UsedBoost?
 }
