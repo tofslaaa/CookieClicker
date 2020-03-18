@@ -18,9 +18,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         settings_close_button.setOnClickListener { it.findNavController().popBackStack() }
 
-        sound_switch.setOnCheckedChangeListener { _, isChecked ->
-            settings.upsert(Configuration(soundIsOn = isChecked))
-        }
         vibration_switch.setOnCheckedChangeListener { _, isChecked ->
             settings.upsert(Configuration(vibrationIsOn = isChecked))
         }
@@ -34,7 +31,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun updateViews() {
         val configuration = settings.getConfiguration()
         if (configuration != null) {
-            sound_switch.isChecked = configuration.soundIsOn
             vibration_switch.isChecked = configuration.vibrationIsOn
         }
     }

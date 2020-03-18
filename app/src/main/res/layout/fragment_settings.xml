@@ -29,37 +29,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/sound_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:fontFamily="@font/noto_sans"
-        android:text="@string/sound"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/settings_close_button" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/sound_switch"
-        style="@style/SwitchCompatStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/sound_text"
-        app:layout_constraintRight_toLeftOf="@id/guideline_end"
-        app:layout_constraintTop_toTopOf="@id/sound_text" />
-
-    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/vibration_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="55dp"
         android:fontFamily="@font/noto_sans"
         android:text="@string/vibration"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/sound_text" />
+        app:layout_constraintTop_toBottomOf="@id/settings_close_button" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/vibration_switch"
