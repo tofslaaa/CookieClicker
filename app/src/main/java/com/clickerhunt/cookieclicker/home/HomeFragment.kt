@@ -102,7 +102,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         override fun onBuyAdditionalSlot() {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            adapter.values.add(BoostModel())
+            adapter.notifyDataSetChanged()
         }
 
         override fun onBoostClicked(boost: BoostModel, callback: (Boolean) -> Unit) {
