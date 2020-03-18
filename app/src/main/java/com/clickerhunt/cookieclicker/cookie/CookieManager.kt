@@ -19,6 +19,7 @@ object CookieManager {
                 AppDatabase.instance.usedBoostsDao().getUsedBoostsRx(),
                 configurationDao.getConfigurationRx()
             )
+            .filter { (_, boosts, _) -> boosts.any { !it.empty } }
             .subscribe { (_, boosts, configuration) ->
                 val summary = boosts.sumBy { it.score }
                 addedCookies.postValue(summary)
