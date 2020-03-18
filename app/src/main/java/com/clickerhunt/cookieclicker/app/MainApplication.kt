@@ -10,6 +10,7 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         AppDatabase.invoke(this)
+        CookieManager.initialize()
         CookieManager.start()
         SettingsManager.initialize(this)
     }

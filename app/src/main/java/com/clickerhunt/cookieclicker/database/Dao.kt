@@ -8,8 +8,12 @@ import io.reactivex.Observable
 @Dao
 interface ConfigurationDao {
 
+    fun upsert(configuration: Configuration) {
+        upsertWithTimestamp(configuration.copy(updateTime = System.currentTimeMillis()))
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsert(configuration: Configuration)
+    fun upsertWithTimestamp(configuration: Configuration)
 
     @Query("SELECT * FROM configuration WHERE id = 0")
     fun getConfiguration(): LiveData<Configuration>
@@ -43,18 +47,25 @@ interface StorageBoostDao {
 @Dao
 interface UsedBoostDao {
 
+    fun insert(boost: UsedBoost) {
+        insertWithTimestamp(boost.copy(updateTime = System.currentTimeMillis()))
+    }
+
     @Insert(onConflict = IGNORE)
-    fun insert(boost: UsedBoost)
+    fun insertWithTimestamp(boost: UsedBoost)
 
     @Delete
     fun delete(boost: UsedBoost)
 
+    fun update(boost: UsedBoost) {
+        updateWithTimestamp(boost.copy(updateTime = System.currentTimeMillis()))
+    }
+
     @Update
-    fun update(boost: UsedBoost)
+    fun updateWithTimestamp(boost: UsedBoost)
 
     @Query("SELECT * FROM usedboost ORDER BY empty ASC, updateTime ASC")
     fun getUsedBoosts(): LiveData<List<UsedBoost>>
-
 
     @Query("SELECT * FROM usedboost ORDER BY empty ASC, updateTime ASC")
     fun getUsedBoostsRx(): Observable<List<UsedBoost>>

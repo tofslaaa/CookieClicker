@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class Configuration(
     @PrimaryKey(autoGenerate = false) val id: Int = 0,
     var vibrationIsOn: Boolean = false,
-    var cookiesCount: Int = 0
+    var cookiesCount: Int = 0,
+
+    val updateTime: Long = System.currentTimeMillis()
 )
