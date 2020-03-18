@@ -32,7 +32,7 @@ interface StorageBoostDao {
     fun delete(boost: StorageBoost)
 
     @Query("DELETE FROM storageboost WHERE id=:id")
-    fun delete(id: Int)
+    fun delete(id: Int): Int
 
     @Update
     fun update(boost: StorageBoost)
@@ -41,7 +41,7 @@ interface StorageBoostDao {
     fun getStorageBoosts(): LiveData<List<StorageBoost>>
 
     @Query("SELECT * FROM storageboost WHERE id = :id")
-    fun getBoostById(id: Int): StorageBoost
+    fun getBoostById(id: Int): StorageBoost?
 }
 
 @Dao

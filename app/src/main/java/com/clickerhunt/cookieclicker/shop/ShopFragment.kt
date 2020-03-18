@@ -3,12 +3,10 @@ package com.clickerhunt.cookieclicker.shop
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.database.AppDatabase
 import com.clickerhunt.cookieclicker.database.StorageBoost
@@ -46,7 +44,7 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
         storageBoostsDao.getStorageBoosts().observe(viewLifecycleOwner) { boosts ->
             val storageBoosts = boosts.map { BoostModel(it.score, it.id, false) }
             adapterBoosts.submitList(storageBoosts)
-            updateViews()
+            updateViews(storageBoosts.isEmpty())
         }
 
         configurationLive.observe(viewLifecycleOwner) {
@@ -55,8 +53,8 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
         }
     }
 
-    private fun updateViews() {
-        if (adapterBoosts.itemCount == 0) {
+    private fun updateViews(isEmpty: Boolean) {
+        if (isEmpty) {
             recycler_your_boost.visibility = View.INVISIBLE
             your_boost_title.visibility = View.INVISIBLE
 
@@ -91,8 +89,10 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
         override fun onBoostClicked(boost: BoostModel) {
             usedBoostsDao.getEmptyBoost()?.let { usedBoost ->
                 SettingsManager.vibrate()
-                storageBoostsDao.delete(boost.id)
-                usedBoostsDao.update(UsedBoost(usedBoost.id, boost.boostValue, false))
+                if (storageBoostsDao.delete(boost.id) > 0) {
+                    val updatedBoost = UsedBoost(usedBoost.id, boost.boostValue, false)
+                    usedBoostsDao.update(updatedBoost)
+                }
             }
         }
     }
