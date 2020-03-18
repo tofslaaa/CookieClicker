@@ -1,7 +1,6 @@
 package com.clickerhunt.cookieclicker.shop
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -26,7 +25,6 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
     private val cookiesDao by lazy { AppDatabase.instance.configurationDao() }
 
     private val configurationLive by lazy { cookiesDao.getConfiguration() }
-    private val configuration get() = configurationLive.value!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,7 +78,7 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
     private val listenerShopAdapter = object : ShopAdapter.Listener {
         override fun onBuyClicked(shopModel: ShopModel) {
             SettingsManager.vibrate()
-            cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount - shopModel.byFor))
+            cookiesDao.addCookiesCount(-shopModel.byFor)
             updateStorageBoosts(shopModel.boostValue)
         }
     }

@@ -22,7 +22,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         settings_close_button.setOnClickListener { it.findNavController().popBackStack() }
 
         vibration_switch.setOnCheckedChangeListener { _, isChecked ->
-            settings.upsert(configuration.value!!.copy(vibrationIsOn = isChecked))
+            settings.enableVibration(isChecked)
         }
 
         configuration.observe(viewLifecycleOwner) {

@@ -3,7 +3,8 @@ package com.clickerhunt.cookieclicker.cookie
 import android.graphics.Point
 import android.graphics.PointF
 import android.os.Bundle
-import android.view.MotionEvent
+import android.util.Log
+import android.view.MotionEvent.*
 import android.view.View
 import androidx.core.graphics.component1
 import androidx.core.graphics.component2
@@ -63,17 +64,25 @@ class CookieFragment : Fragment(R.layout.fragment_cookie) {
     }
 
     private val touchListener = View.OnTouchListener { _, event ->
-        if (event.action == MotionEvent.ACTION_UP) {
+        val eventX = event.getX(event.actionIndex)
+        val eventY = event.getY(event.actionIndex)
+        val actionMasked = event.actionMasked
+        Log.d(
+            this::class.java.simpleName,
+            "event: masked=$actionMasked action=${event.action} index=${event.actionIndex} pointerCount=${event.pointerCount} at [$eventX, $eventY]"
+        )
+
+        if (actionMasked == ACTION_DOWN || actionMasked == ACTION_POINTER_DOWN) {
 
             radius = cookie_image.width / 2
             offset.x = (cookie_image.left + cookie_image.width / 2)
             offset.y = (cookie_image.top + cookie_image.height / 2)
 
-            val sqrt = sqrt((event.x - offset.x).pow(2) + (event.y - offset.y).pow(2))
+            val sqrt = sqrt((eventX - offset.x).pow(2) + (eventY - offset.y).pow(2))
             if (sqrt < radius) {
                 SettingsManager.vibrateShort()
-                cookie_click.showCookie(event.x, event.y, "+1")
-                cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount + 1))
+                cookie_click.showCookie(eventX, eventY, "+1")
+                cookiesDao.addCookiesCount(1)
             }
         }
         return@OnTouchListener true
