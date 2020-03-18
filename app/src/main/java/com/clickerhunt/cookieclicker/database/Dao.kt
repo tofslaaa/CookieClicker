@@ -3,6 +3,7 @@ package com.clickerhunt.cookieclicker.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
+import io.reactivex.Observable
 
 @Dao
 interface ConfigurationDao {
@@ -12,6 +13,9 @@ interface ConfigurationDao {
 
     @Query("SELECT * FROM configuration WHERE id = 0")
     fun getConfiguration(): LiveData<Configuration>
+
+    @Query("SELECT * FROM configuration WHERE id = 0")
+    fun getConfigurationRx(): Observable<Configuration>
 }
 
 @Dao
@@ -50,6 +54,10 @@ interface UsedBoostDao {
 
     @Query("SELECT * FROM usedboost ORDER BY empty ASC, updateTime ASC")
     fun getUsedBoosts(): LiveData<List<UsedBoost>>
+
+
+    @Query("SELECT * FROM usedboost ORDER BY empty ASC, updateTime ASC")
+    fun getUsedBoostsRx(): Observable<List<UsedBoost>>
 
     @Query("SELECT * FROM usedboost WHERE id = :id")
     fun getBoostById(id: Int): UsedBoost

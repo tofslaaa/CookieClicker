@@ -63,7 +63,7 @@ class CookieView @JvmOverloads constructor(
                 paintBitmap
             )
             canvas.drawText(
-                "+1",
+                cookie.score,
                 cookie.point.x,
                 cookie.point.y + cookieBitmap.height / 3 + 4.dpToPx(),
                 paintText
