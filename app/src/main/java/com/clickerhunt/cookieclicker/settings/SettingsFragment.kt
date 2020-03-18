@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
-    private val settings by lazy { AppDatabase.invoke(requireContext()).configurationDao() }
+    private val settings by lazy { AppDatabase.instance.configurationDao() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

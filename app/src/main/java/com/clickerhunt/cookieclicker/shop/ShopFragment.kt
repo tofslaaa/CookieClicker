@@ -20,9 +20,9 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
     private lateinit var adapterShop: ShopAdapter
     private lateinit var adapterBoosts: StorageBoostsAdapter
 
-    private val storageBoostsDao by lazy { AppDatabase.invoke(requireContext()).storageBoostsDao() }
-    private val usedBoostsDao by lazy { AppDatabase.invoke(requireContext()).usedBoostsDao() }
-    private val cookiesDao by lazy { AppDatabase.invoke(requireContext()).configurationDao() }
+    private val storageBoostsDao by lazy { AppDatabase.instance.storageBoostsDao() }
+    private val usedBoostsDao by lazy { AppDatabase.instance.usedBoostsDao() }
+    private val cookiesDao by lazy { AppDatabase.instance.configurationDao() }
 
     private val configurationLive by lazy { cookiesDao.getConfiguration() }
     private val configuration get() = configurationLive.value!!

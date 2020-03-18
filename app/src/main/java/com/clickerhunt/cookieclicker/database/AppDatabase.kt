@@ -20,11 +20,12 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var instance: AppDatabase? = null
+        private var _instance: AppDatabase? = null
+        val instance: AppDatabase get() = _instance!!
         private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-            instance ?: buildDatabase(context).also { instance = it }
+        operator fun invoke(context: Context) = _instance ?: synchronized(LOCK) {
+            _instance ?: buildDatabase(context).also { _instance = it }
         }
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
@@ -35,8 +36,8 @@ abstract class AppDatabase : RoomDatabase() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     thread {
-                        val dao = instance!!.usedBoostsDao()
-                        val configurationDao = instance!!.configurationDao()
+                        val dao = _instance!!.usedBoostsDao()
+                        val configurationDao = _instance!!.configurationDao()
                         if (BuildConfig.DEBUG) {
                             configurationDao.upsert(Configuration(cookiesCount = 1000))
                         } else{

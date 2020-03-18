@@ -21,9 +21,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var adapter: BoostAdapter
 
-    private val cookiesDao by lazy { AppDatabase.invoke(requireContext()).configurationDao() }
-    private val usedBoostsDao by lazy { AppDatabase.invoke(requireContext()).usedBoostsDao() }
-    private val storageBoostsDao by lazy { AppDatabase.invoke(requireContext()).storageBoostsDao() }
+    private val cookiesDao by lazy { AppDatabase.instance.configurationDao() }
+    private val usedBoostsDao by lazy { AppDatabase.instance.usedBoostsDao() }
+    private val storageBoostsDao by lazy { AppDatabase.instance.storageBoostsDao() }
 
     private val configurationLive by lazy { cookiesDao.getConfiguration() }
     private val configuration get() = configurationLive.value!!
