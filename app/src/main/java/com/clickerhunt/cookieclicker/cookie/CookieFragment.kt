@@ -10,6 +10,7 @@ import androidx.core.graphics.component2
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.clickerhunt.cookieclicker.R
+import com.clickerhunt.cookieclicker.database.AppDatabase
 import com.clickerhunt.cookieclicker.dpToPx
 import com.clickerhunt.cookieclicker.settings.SettingsManager
 import kotlinx.android.synthetic.main.fragment_cookie.*
@@ -17,11 +18,15 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.fragment_cookie) {
+class CookieFragment : Fragment(R.layout.fragment_cookie) {
 
     private var radius = 0
     private val offset = Point()
     private val mainBoostCookiePoint = PointF()
+
+    private val cookiesDao = AppDatabase.instance.configurationDao()
+    private val configurationLive = cookiesDao.getConfiguration()
+    private val configuration get() = configurationLive.value!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +47,7 @@ class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.f
 
 
         cookie_click.setOnTouchListener(touchListener)
+        configurationLive.observe(viewLifecycleOwner) {}
     }
 
     private fun randomCookiePoint(): PointF {
@@ -67,14 +73,11 @@ class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.f
             if (sqrt < radius) {
                 SettingsManager.vibrateShort()
                 cookie_click.showCookie(event.x, event.y, "+1")
-                listenerCookie.onCookieClicked()
+                cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount + 1))
             }
         }
         return@OnTouchListener true
     }
 
 
-    interface Listener {
-        fun onCookieClicked()
-    }
 }

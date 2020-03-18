@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +12,6 @@ import androidx.transition.TransitionManager
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.cookie.CookieFragment
 import com.clickerhunt.cookieclicker.database.AppDatabase
-import com.clickerhunt.cookieclicker.database.Configuration
 import com.clickerhunt.cookieclicker.database.StorageBoost
 import com.clickerhunt.cookieclicker.database.UsedBoost
 import com.clickerhunt.cookieclicker.model.BoostModel
@@ -70,7 +68,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val fragmentTransaction = childFragmentManager.beginTransaction()
         fragmentTransaction.replace(
             R.id.placeholder,
-            CookieFragment(listenerCookie)
+            CookieFragment()
         )
         fragmentTransaction.commit()
         shop_open_button.visibility = View.VISIBLE
@@ -93,13 +91,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             SettingsManager.vibrate()
             storageBoostsDao.insert(StorageBoost(boostModel.id, boostModel.boostValue))
             usedBoostsDao.update(UsedBoost(boostModel.id, 0, true))
-        }
-    }
-
-
-    private val listenerCookie = object : CookieFragment.Listener {
-        override fun onCookieClicked() {
-            cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount + 1))
         }
     }
 
