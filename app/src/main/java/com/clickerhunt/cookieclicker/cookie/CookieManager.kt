@@ -14,7 +14,7 @@ object CookieManager {
 
     fun start() {
         val configurationDao = AppDatabase.instance.configurationDao()
-        disposable = Observable.interval(17, TimeUnit.MILLISECONDS)
+        disposable = Observable.interval(10, TimeUnit.SECONDS)
             .withLatestFrom(
                 AppDatabase.instance.usedBoostsDao().getUsedBoostsRx(),
                 configurationDao.getConfigurationRx()
