@@ -14,6 +14,7 @@ import com.clickerhunt.cookieclicker.database.Configuration
 import com.clickerhunt.cookieclicker.database.StorageBoost
 import com.clickerhunt.cookieclicker.database.UsedBoost
 import com.clickerhunt.cookieclicker.model.BoostModel
+import com.clickerhunt.cookieclicker.settings.SettingsManager
 import com.clickerhunt.cookieclicker.shop.ShopFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -81,6 +82,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val listenerAdapter = object : BoostAdapter.Listener {
         override fun onDeleteBoostClicked(boostModel: BoostModel) {
+            SettingsManager.vibrate()
             storageBoostsDao.insert(StorageBoost(boostModel.id, boostModel.boostValue))
             usedBoostsDao.update(UsedBoost(boostModel.id, 0, true))
         }

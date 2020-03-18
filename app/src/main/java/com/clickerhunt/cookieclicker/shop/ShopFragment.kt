@@ -13,6 +13,7 @@ import com.clickerhunt.cookieclicker.database.StorageBoost
 import com.clickerhunt.cookieclicker.database.UsedBoost
 import com.clickerhunt.cookieclicker.model.BoostModel
 import com.clickerhunt.cookieclicker.model.ShopModel
+import com.clickerhunt.cookieclicker.settings.SettingsManager
 import kotlinx.android.synthetic.main.fragment_shop.*
 
 class ShopFragment : Fragment(R.layout.fragment_shop) {
@@ -80,6 +81,7 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
 
     private val listenerShopAdapter = object : ShopAdapter.Listener {
         override fun onBuyClicked(shopModel: ShopModel) {
+            SettingsManager.vibrate()
             cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount - shopModel.byFor))
             updateStorageBoosts(shopModel.boostValue)
         }
@@ -87,8 +89,8 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
 
     private val listenerBoostsAdapter = object : StorageBoostsAdapter.Listener {
         override fun onBoostClicked(boost: BoostModel) {
-            Log.d("BOOST", "${boost.id} and ${boost.boostValue}")
             usedBoostsDao.getEmptyBoost()?.let { usedBoost ->
+                SettingsManager.vibrate()
                 storageBoostsDao.delete(boost.id)
                 usedBoostsDao.update(UsedBoost(usedBoost.id, boost.boostValue, false))
             }

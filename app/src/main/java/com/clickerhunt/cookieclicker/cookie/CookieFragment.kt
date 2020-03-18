@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.dpToPx
+import com.clickerhunt.cookieclicker.settings.SettingsManager
 import kotlinx.android.synthetic.main.fragment_cookie.*
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -64,6 +65,7 @@ class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.f
 
             val sqrt = sqrt((event.x - offset.x).pow(2) + (event.y - offset.y).pow(2))
             if (sqrt < radius) {
+                SettingsManager.vibrateShort()
                 cookie_click.showCookie(event.x, event.y, "+1")
                 listenerCookie.onCookieClicked()
             }

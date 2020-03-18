@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.clickerhunt.cookieclicker">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".app.MainApplication"
         android:allowBackup="true"
@@ -11,9 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-            android:supportsPictureInPicture="false"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
