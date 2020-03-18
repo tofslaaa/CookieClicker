@@ -14,15 +14,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val settings by lazy { AppDatabase.instance.configurationDao() }
 
+    val configuration = settings.getConfiguration()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         settings_close_button.setOnClickListener { it.findNavController().popBackStack() }
 
         vibration_switch.setOnCheckedChangeListener { _, isChecked ->
-            settings.upsert(Configuration(vibrationIsOn = isChecked))
+            settings.upsert(configuration.value!!.copy(vibrationIsOn = isChecked))
         }
-        settings.getConfiguration().observe(viewLifecycleOwner){
+
+        configuration.observe(viewLifecycleOwner) {
             vibration_switch.isChecked = it.vibrationIsOn
         }
     }
