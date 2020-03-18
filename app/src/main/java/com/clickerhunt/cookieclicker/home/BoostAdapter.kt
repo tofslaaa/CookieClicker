@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.model.BoostModel
+import com.clickerhunt.cookieclicker.shop.BoostModelDiffer
 import kotlinx.android.synthetic.main.item_boost.view.*
 
 class BoostAdapter(private val listener: Listener) :
-    RecyclerView.Adapter<BoostAdapter.ViewHolder>() {
-
-    val values = mutableListOf<BoostModel>()
+    ListAdapter<BoostModel, BoostAdapter.ViewHolder>(BoostModelDiffer()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
@@ -22,10 +22,8 @@ class BoostAdapter(private val listener: Listener) :
         return ViewHolder(itemView)
     }
 
-    override fun getItemCount(): Int = values.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val boostModel = values[position]
+        val boostModel = getItem(position)
 
         if (boostModel.empty) {
             Log.d("BOOST", "invisible")

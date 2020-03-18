@@ -48,7 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         usedBoostsDao.getUsedBoosts().observe(viewLifecycleOwner) { boosts ->
-            if (adapter.values.isEmpty()) {
+            if (adapter.itemCount == 0) {
                 TransitionManager.beginDelayedTransition(
                     view as ViewGroup,
                     AutoTransition().apply {
@@ -56,9 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     })
             }
             val storageBoosts = boosts.map { BoostModel(it.score, it.id, it.empty) }
-            adapter.values.clear()
-            adapter.values.addAll(storageBoosts)
-            adapter.notifyDataSetChanged()
+            adapter.submitList(storageBoosts)
         }
 
         configurationLive.observe(viewLifecycleOwner) {

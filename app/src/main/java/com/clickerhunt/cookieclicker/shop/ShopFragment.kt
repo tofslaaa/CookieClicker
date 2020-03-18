@@ -3,10 +3,12 @@ package com.clickerhunt.cookieclicker.shop
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.database.AppDatabase
 import com.clickerhunt.cookieclicker.database.StorageBoost
@@ -43,9 +45,7 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
 
         storageBoostsDao.getStorageBoosts().observe(viewLifecycleOwner) { boosts ->
             val storageBoosts = boosts.map { BoostModel(it.score, it.id, false) }
-            adapterBoosts.values.clear()
-            adapterBoosts.values.addAll(storageBoosts)
-            adapterBoosts.notifyDataSetChanged()
+            adapterBoosts.submitList(storageBoosts)
             updateViews()
         }
 
@@ -56,7 +56,7 @@ class ShopFragment : Fragment(R.layout.fragment_shop) {
     }
 
     private fun updateViews() {
-        if (adapterBoosts.values.isEmpty()) {
+        if (adapterBoosts.itemCount == 0) {
             recycler_your_boost.visibility = View.INVISIBLE
             your_boost_title.visibility = View.INVISIBLE
 
