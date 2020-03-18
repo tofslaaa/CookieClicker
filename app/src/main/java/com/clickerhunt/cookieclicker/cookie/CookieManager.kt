@@ -36,10 +36,10 @@ object CookieManager {
                 configurationDao.getConfigurationRx()
             )
             .filter { (_, boosts, _) -> boosts.any { !it.empty } }
-            .subscribe { (_, boosts, configuration) ->
+            .subscribe { (_, boosts, _) ->
                 val summary = boosts.sumBy { it.score }
                 addedCookies.postValue(summary)
-                configurationDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount + summary))
+                configurationDao.addCookiesCount(summary)
             }
     }
 
