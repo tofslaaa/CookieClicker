@@ -25,10 +25,12 @@ class CookieFragment(private val listenerCookie: Listener) : Fragment(R.layout.f
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        CookieManager.addedCookies.value = 0
         CookieManager.addedCookies.observe(viewLifecycleOwner) {
+            if (cookie_image.width == 0 || it == 0) return@observe
             val (x, y) = randomCookiePoint()
 
-            for (i in 0 until it - 1) {
+            for (i in 0 until (it - 1).coerceAtMost(10)) {
                 val offset = 32.dpToPx().toDouble()
                 val xChild = Random.nextDouble(x - offset, x + offset).toFloat()
                 val yChild = Random.nextDouble(y - offset, y + offset).toFloat()
