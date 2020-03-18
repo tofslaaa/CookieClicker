@@ -39,6 +39,8 @@ abstract class AppDatabase : RoomDatabase() {
                         val configurationDao = instance!!.configurationDao()
                         if (BuildConfig.DEBUG) {
                             configurationDao.upsert(Configuration(cookiesCount = 1000))
+                        } else{
+                            configurationDao.upsert(Configuration())
                         }
                         (1..3).map { UsedBoost(score = 0, empty = true) }.forEach { dao.insert(it) }
                     }

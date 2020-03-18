@@ -3,6 +3,7 @@ package com.clickerhunt.cookieclicker.settings
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.database.AppDatabase
@@ -21,17 +22,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         vibration_switch.setOnCheckedChangeListener { _, isChecked ->
             settings.upsert(Configuration(vibrationIsOn = isChecked))
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        updateViews()
-    }
-
-    private fun updateViews() {
-        val configuration = settings.getConfiguration()
-        if (configuration != null) {
-            vibration_switch.isChecked = configuration.vibrationIsOn
+        settings.getConfiguration().observe(viewLifecycleOwner){
+            vibration_switch.isChecked = it.vibrationIsOn
         }
     }
 

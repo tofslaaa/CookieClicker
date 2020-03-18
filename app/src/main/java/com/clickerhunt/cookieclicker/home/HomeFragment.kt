@@ -3,6 +3,7 @@ package com.clickerhunt.cookieclicker.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +20,13 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var adapter: BoostAdapter
-    private var cookiesCount = 0
 
     private val cookiesDao by lazy { AppDatabase.invoke(requireContext()).configurationDao() }
     private val usedBoostsDao by lazy { AppDatabase.invoke(requireContext()).usedBoostsDao() }
     private val storageBoostsDao by lazy { AppDatabase.invoke(requireContext()).storageBoostsDao() }
+
+    private val configurationLive by lazy { cookiesDao.getConfiguration() }
+    private val configuration get() = configurationLive.value!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,22 +49,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             adapter.values.addAll(storageBoosts)
             adapter.notifyDataSetChanged()
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        displayCookie()
-
-        val configuration = cookiesDao.getConfiguration()
-        if (configuration != null) {
-            cookiesCount = configuration.cookiesCount
+        configurationLive.observe(viewLifecycleOwner) {
+            cookies_count.text = it.cookiesCount.toString()
         }
-        cookies_count.text = cookiesCount.toString()
-    }
 
-    override fun onStop() {
-        super.onStop()
-        saveData()
+        displayCookie()
     }
 
     private fun displayCookie() {
@@ -76,20 +69,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun displayShop() {
-        saveData()
-
         val fragmentTransaction = childFragmentManager.beginTransaction()
         fragmentTransaction.replace(
             R.id.placeholder,
-            ShopFragment(listenerShop)
+            ShopFragment()
         )
         fragmentTransaction.commit()
         shop_open_button.visibility = View.INVISIBLE
         shop_close_button.visibility = View.VISIBLE
-    }
-
-    private fun saveData() {
-        cookiesDao.upsert(Configuration(cookiesCount = cookiesCount))
     }
 
     private val listenerAdapter = object : BoostAdapter.Listener {
@@ -102,20 +89,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val listenerCookie = object : CookieFragment.Listener {
         override fun onCookieClicked() {
-            cookiesCount++
-            cookies_count.text = cookiesCount.toString()
+            cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount + 1))
         }
     }
 
-    private val listenerShop = object : ShopFragment.Listener {
-        override fun onBuyBoost(cost: Int) {
-            cookiesCount -= cost
-            cookies_count.text = cookiesCount.toString()
-        }
-
-        override fun onBuyAdditionalSlot() {
-            usedBoostsDao.insert(UsedBoost(0, 0, true))
-        }
-    }
 
 }

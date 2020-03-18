@@ -43,9 +43,10 @@ class ShopAdapter(
             holder.boostValue.text = "+${shopModel.boostValue}"
         }
 
-        if (shopModel.byFor > cookiesCount) {
-            holder.buyButton?.isEnabled = false
-            holder.buyButton?.alpha = 0.5f
+        val available = shopModel.byFor <= cookiesCount
+        holder.buyButton?.apply {
+            isEnabled = available
+            alpha = if (available) 1f else 0.5f
         }
 
         holder.boostText.setText(shopModel.boostText)

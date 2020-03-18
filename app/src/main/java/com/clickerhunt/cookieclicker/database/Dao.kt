@@ -11,7 +11,7 @@ interface ConfigurationDao {
     fun upsert(configuration: Configuration)
 
     @Query("SELECT * FROM configuration WHERE id = 0")
-    fun getConfiguration(): Configuration?
+    fun getConfiguration(): LiveData<Configuration>
 }
 
 @Dao

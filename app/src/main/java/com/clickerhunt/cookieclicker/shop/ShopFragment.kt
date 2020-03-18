@@ -15,21 +15,22 @@ import com.clickerhunt.cookieclicker.model.BoostModel
 import com.clickerhunt.cookieclicker.model.ShopModel
 import kotlinx.android.synthetic.main.fragment_shop.*
 
-class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_shop) {
+class ShopFragment : Fragment(R.layout.fragment_shop) {
 
     private lateinit var adapterShop: ShopAdapter
     private lateinit var adapterBoosts: StorageBoostsAdapter
 
     private val storageBoostsDao by lazy { AppDatabase.invoke(requireContext()).storageBoostsDao() }
     private val usedBoostsDao by lazy { AppDatabase.invoke(requireContext()).usedBoostsDao() }
+    private val cookiesDao by lazy { AppDatabase.invoke(requireContext()).configurationDao() }
+
+    private val configurationLive by lazy { cookiesDao.getConfiguration() }
+    private val configuration get() = configurationLive.value!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val cookiesCount =
-            AppDatabase.invoke(requireContext()).configurationDao().getConfiguration()?.cookiesCount
         adapterShop = ShopAdapter(listenerShopAdapter)
-        if (cookiesCount != null) adapterShop.cookiesCount = cookiesCount
 
         recycler_shop.layoutManager = LinearLayoutManager(requireContext())
         recycler_shop.adapter = adapterShop
@@ -45,6 +46,11 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
             adapterBoosts.values.addAll(storageBoosts)
             adapterBoosts.notifyDataSetChanged()
             updateViews()
+        }
+
+        configurationLive.observe(viewLifecycleOwner) {
+            adapterShop.cookiesCount = it.cookiesCount
+            adapterShop.notifyDataSetChanged()
         }
     }
 
@@ -66,7 +72,7 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
 
     private fun updateStorageBoosts(value: Int?) {
         if (value == null) {
-            listener.onBuyAdditionalSlot()
+            usedBoostsDao.insert(UsedBoost(0, 0, true))
         } else {
             storageBoostsDao.insert(StorageBoost(score = value))
         }
@@ -74,10 +80,8 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
 
     private val listenerShopAdapter = object : ShopAdapter.Listener {
         override fun onBuyClicked(shopModel: ShopModel) {
-            listener.onBuyBoost(shopModel.byFor)
+            cookiesDao.upsert(configuration.copy(cookiesCount = configuration.cookiesCount - shopModel.byFor))
             updateStorageBoosts(shopModel.boostValue)
-            adapterShop.cookiesCount -= shopModel.byFor
-            adapterShop.notifyDataSetChanged()
         }
     }
 
@@ -91,8 +95,4 @@ class ShopFragment(private val listener: Listener) : Fragment(R.layout.fragment_
         }
     }
 
-    interface Listener {
-        fun onBuyBoost(cost: Int)
-        fun onBuyAdditionalSlot()
-    }
 }
