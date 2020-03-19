@@ -80,11 +80,37 @@ class CookieFragment : Fragment(R.layout.fragment_cookie) {
 
             val sqrt = sqrt((eventX - offset.x).pow(2) + (eventY - offset.y).pow(2))
             if (sqrt < radius) {
+                if (event.action == ACTION_DOWN) {
+                    cookie_image.run {
+                        val centerX = right - radius
+                        val centerY = bottom - radius
+                        val partX = (centerX - eventX) / radius
+                        val partY = (centerY - eventY) / radius
+                        val angle = 5f
+                        rotationX = partY * angle
+                        rotationY = -partX * angle
+                    }
+                }
+
+                val scale = 0.99f
+                if (event.action == ACTION_DOWN) {
+                    cookie_image.scaleX = scale
+                    cookie_image.scaleY = scale
+                }
+
                 SettingsManager.vibrateShort()
                 cookie_click.showCookie(eventX, eventY, "+1")
                 cookiesDao.addCookiesCount(1)
             }
         }
+
+        if (event.action == ACTION_UP || event.action == ACTION_CANCEL) {
+            cookie_image.scaleX = 1f
+            cookie_image.scaleY = 1f
+            cookie_image.rotationX = 0f
+            cookie_image.rotationY = 0f
+        }
+
         return@OnTouchListener true
     }
 
