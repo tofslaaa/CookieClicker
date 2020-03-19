@@ -15,11 +15,11 @@ interface ConfigurationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsertWithTimestamp(configuration: Configuration)
 
-    @Query("UPDATE configuration SET cookiesCount = cookiesCount + :added, updateTime=time()")
-    fun addCookiesCount(added: Int)
+    @Query("UPDATE configuration SET cookiesCount = cookiesCount + :added, updateTime=:timeMillis")
+    fun addCookiesCount(added: Int, timeMillis:Long = System.currentTimeMillis())
 
-    @Query("UPDATE configuration SET vibrationIsOn = :enabled, updateTime=time()")
-    fun enableVibration(enabled: Boolean)
+    @Query("UPDATE configuration SET vibrationIsOn = :enabled, updateTime=:timeMillis")
+    fun enableVibration(enabled: Boolean, timeMillis:Long = System.currentTimeMillis())
 
     @Query("SELECT * FROM configuration WHERE id = 0")
     fun getConfiguration(): LiveData<Configuration>

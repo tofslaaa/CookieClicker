@@ -7,7 +7,6 @@ import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.clickerhunt.cookieclicker.R
 import com.clickerhunt.cookieclicker.database.AppDatabase
-import com.clickerhunt.cookieclicker.database.Configuration
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -22,7 +21,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         settings_close_button.setOnClickListener { it.findNavController().popBackStack() }
 
         vibration_switch.setOnCheckedChangeListener { _, isChecked ->
+            val a = settings.getConfigurationRx().blockingFirst()
             settings.enableVibration(isChecked)
+            val b = settings.getConfigurationRx().blockingFirst()
+            val aTime = a.updateTime
+            val bTime = b.updateTime
+            val result = bTime - aTime
         }
 
         configuration.observe(viewLifecycleOwner) {
